@@ -1,52 +1,52 @@
-# Cómo usé Python, SQL y un dashboard interactivo para analizar $205M en contratos de procurement
+# How I used Python, SQL and an interactive dashboard to analyze $205M in procurement contracts
 
-**Por Jerson · Procurement Data Analyst · Mayo 2025**
-
----
-
-Hace unas semanas me hice una pregunta que todo analista de procurement debería hacerse antes de tomar cualquier decisión de compra:
-
-> *¿Realmente sabemos dónde está yendo el dinero?*
-
-La respuesta honesta, en la mayoría de organizaciones, es: **no del todo**.
-
-Los datos existen. Están en el ERP, en los contratos, en los correos. Pero dispersos, sin estructura, sin historia. Este proyecto nació de querer responder esa pregunta correctamente — con datos, con código, y con un dashboard que cualquier gerente pueda usar.
+**By Jerson · Procurement Data Analyst · May 2026**
 
 ---
 
-## El problema de negocio
+A few weeks ago I asked myself a question every procurement analyst should ask before making any purchasing decision:
 
-Imagina una empresa de distribución regional — llamémosla **LatamCorp S.A.** — con operaciones en Panamá y relaciones comerciales con 20 proveedores activos. La gerencia tiene tres sospechas:
+> *Do we really know where the money is going?*
 
-1. El gasto está **concentrado en pocos vendors** — lo cual es un riesgo operacional.
-2. Algunas **categorías están creciendo sin control** — nadie sabe por qué.
-3. No hay **visibilidad del gasto por período** — se toman decisiones a ciegas.
+The honest answer, in most organizations, is: **not entirely**.
 
-Mi tarea: construir un análisis completo que responda estas tres preguntas con datos reales.
+The data exists. It lives in the ERP, in contracts, in emails. But scattered, unstructured, without history. This project was born from wanting to answer that question properly — with data, with code, and with a dashboard any manager can use.
 
 ---
 
-## El stack técnico
+## The business problem
 
-Mantuve todo simple e intencional. No usé nada que no pueda justificar:
+Imagine a regional distribution company — let's call it LatamCorp S.A. — operating in Panama with 20 active vendors. Leadership had three suspicions:
 
-- **Python + pandas** — limpieza, transformación, EDA y generación de gráficos
-- **SQL con DuckDB** — consultas analíticas directamente sobre el CSV procesado
-- **HTML + Chart.js** — dashboard interactivo standalone, sin servidor, sin Power BI license
+1. Spend is concentrated in a few vendors — an operational risk.
+2. Some categories are growing unchecked — nobody knows why.
+3. There is no visibility into spend over time — decisions are made blind.
 
-El dataset: **4,930 contratos de compra**, FY2022–2023, $205M en gasto total.
+My task: build a complete analysis that answers these three questions with real data.
 
 ---
 
-## Lo que encontré
+## The tech stack
 
-### 1. El problema Pareto: 5 vendors, 83% del gasto
+I kept everything simple and intentional. Nothing I can't justify:
 
-Este fue el hallazgo más crítico.
+- **Python + pandas** — cleaning, transformation, EDA and chart generation
+- **SQL con DuckDB** — analytical queries directly on the processed CSV
+- **HTML + Chart.js** — standalone interactive dashboard, no server, no Power BI license
 
-De 20 proveedores activos, **solo 5 concentran el 83% del gasto total**:
+The dataset: **4,930 purchase contracts**, FY2022–2023, $205M in total spend.
 
-| Vendor | Gasto Total | % del Total |
+---
+
+## What I found
+
+### 1. The Pareto problem: 5 vendors, 83% of spend
+
+This was the most critical finding.
+
+Out of 20 active vendors, **only 5 hold 83% of total spend**:
+
+| Vendor | Total Spend | % of Total |
 |--------|-------------|-------------|
 | Distribuidora Global S.A. | $45.9M | 22.4% |
 | TechSupplies Panama | $38.9M | 18.9% |
@@ -54,15 +54,15 @@ De 20 proveedores activos, **solo 5 concentran el 83% del gasto total**:
 | Oficentro Internacional | $29.9M | 14.6% |
 | Ferremax Industrial | $25.0M | 12.2% |
 
-Esto no es eficiencia — es fragilidad. Un problema con cualquiera de estos vendors (quiebra, desabasto, renegociación de precios) impactaría materialmente la operación.
+This isn't efficiency — it's fragility. Any disruption with one of these vendors (bankruptcy, stockout, price renegotiation) would materially impact operations.
 
-**¿Qué hacer?** Implementar una política de tope del 15% por vendor y desarrollar proveedores alternativos en las categorías de mayor concentración.
+**¿What to do?** Enforce a 15% cap per vendor and develop alternative suppliers in the highest-concentration categories.
 
 ---
 
-### 2. El índice HHI: en el límite de la zona de riesgo
+### 2. The HHI index: sitting at the edge of the risk zone
 
-Para medir concentración objetivamente, calculé el **Índice Herfindahl-Hirschman (HHI)** — la misma métrica que usan los reguladores antimonopolio.
+To measure concentration objectively, I calculated the **Herfindahl-Hirschman Index (HHI)** — the same metric antitrust regulators use..
 
 ```sql
 WITH shares AS (
@@ -76,46 +76,46 @@ FROM shares;
 -- Resultado: 1,466.1
 ```
 
-**HHI = 1,466** — está dentro del umbral "competitivo" (< 1,500), pero a solo 34 puntos del límite. Un contrato adicional importante con Distribuidora Global lo empujaría a zona moderada.
+**HHI = 1,466** — within the "competitive" threshold (< 1,500), but only 34 points from the limit. One additional large contract with Distribuidora Global would push it into moderate concentration territory.
 
-Este número debería estar en el dashboard de cualquier director de procurement.
+This number should be on every procurement director's dashboard.
 
 ---
 
-### 3. IT creció 23% interanual. Logistics creció 53%. ¿Por qué?
+### 3. IT grew 23% year-over-year. Logistics grew 53%. Why?
 
-El análisis año contra año reveló dos patrones muy distintos:
+The year-over-year analysis revealed two very different patterns:
 
-**Categorías en crecimiento:**
+**Growing categories::**
 - Logistics & Transport: **+53%** ($12.6M → $19.3M)
 - Medical Supplies: **+27%**
 - IT & Technology: **+23%** ($22M → $27.1M)
 
-**Categorías en contracción:**
+**Contracting categories:**
 - Professional Services: **-17%** ($15.1M → $12.6M)
 - Maintenance & Repair: **-11%**
 
-El crecimiento de IT es esperado y positivo — correlaciona con iniciativas de digitalización. Pero el salto de **53% en Logistics** en un solo año merece una revisión: ¿es expansión real del negocio o ineficiencia en la cadena de distribución?
+IT growth is expected and positive — it correlates with digitalization initiatives. But the **53% jump in Logistics** in a single year warrants a deeper look: is this real business expansion or inefficiency in the distribution chain?
 
-La caída en Professional Services puede ser una señal positiva de capacidad interna creciente — o puede indicar recortes presupuestarios que afectan proyectos estratégicos.
+The drop in Professional Services could be a positive sign of growing internal capacity — or it could signal budget cuts affecting strategic projects.
 
-**Sin datos, ambas son solo opiniones.**
-
----
-
-### 4. Diciembre 2023: el pico anómalo
-
-La tendencia mensual mostró algo que no esperaba: un pico de **$12.5M en diciembre 2023** — el más alto de todo el período analizado, 50% por encima del mes anterior.
-
-Este tipo de concentración al cierre del año fiscal es un patrón clásico de *"gasta o pierde el presupuesto"* — una práctica que infla costos, precipita contratos mal negociados y crea riesgo operacional.
-
-**Recomendación:** revisar los contratos de alto valor adjudicados en noviembre–diciembre y evaluar si el proceso de planificación presupuestaria permite mayor distribución durante el año.
+**Without data, both are just opinions.**
 
 ---
 
-## La parte técnica que más me gustó: SQL con window functions
+### 4. December 2023: the anomalous spike
 
-Una de las partes más satisfactorias del proyecto fue escribir las queries analíticas. Aquí la que calcula el acumulado Pareto directamente en SQL:
+The monthly trend revealed something unexpected: a peak of $12.5M in December 2023 — the highest of the entire period, 50% above the previous month.
+
+This type of year-end concentration is the classic *"use it or lose it"* budget pattern — a practice that inflates costs, rushes poorly negotiated contracts, and creates operational risk.
+
+**Recomendation:** review high-value contracts awarded in November–December and assess whether the budget planning process allows for better distribution throughout the year.
+
+---
+
+## The technical part I enjoyed most: SQL with window functions
+
+One of the most satisfying parts of the project was writing the analytical queries. Here's the one that calculates the Pareto cumulative directly in SQL:
 
 ```sql
 SELECT
@@ -132,32 +132,32 @@ GROUP BY vendor_name
 ORDER BY total_spend DESC;
 ```
 
-No necesité Python para esto. SQL puro, con una window function anidada, calcula el porcentaje acumulado en una sola pasada. Limpio y reproducible.
+No Python needed. Pure SQL, with a nested window function, calculates the cumulative percentage in a single pass. Clean and reproducible.
 
 ---
 
-## Qué aprendí construyendo esto
+## What I learned building this
 
-**Sobre datos:** Los datos sucios son la norma, no la excepción. El dataset tenía 30 duplicados exactos, 158 nulos en montos, y 38 vendors únicos que después de estandarizar casing se redujeron a 20. La limpieza tomó tanto tiempo como el análisis.
+**On data:** Dirty data is the norm, not the exception. The dataset had 30 exact duplicates, 158 null amounts, and 38 unique vendor names that after standardizing casing dropped to 20. Cleaning took as long as the analysis itself.
 
-**Sobre negocio:** Los números son el punto de partida, no el destino. El HHI de 1,466 es interesante. La pregunta *"¿qué hacemos con eso?"* es donde está el valor real.
+**On business:** Numbers are the starting point, not the destination. An HHI of 1,466 is interesting. The question "what do we do about it?" is where the real value lives.
 
-**Sobre comunicación:** Un dashboard que nadie entiende es tan inútil como no tener datos. Diseñé el dashboard para que un gerente sin contexto técnico pudiera leerlo en 2 minutos y extraer decisiones concretas.
-
----
-
-## Recursos y código
-
-Todo el código está disponible en GitHub — incluyendo el script de limpieza, las 10 queries SQL documentadas, los scripts de EDA con 6 visualizaciones, y el dashboard HTML interactivo:
-
-🔗 **GitHub:** `github.com/tu-usuario/procurement-spend-analytics`
-🔗 **Dashboard:** `tu-usuario.github.io/procurement-spend-analytics`
-
-Si estás trabajando en procurement, supply chain o análisis de datos y quieres discutir la metodología — me encuentras en LinkedIn.
+**On comunication:** A dashboard nobody understands is as useless as having no data at all. I designed the dashboard so a manager with no technical background could read it in 2 minutes and extract concrete decisions.
 
 ---
 
-*Este análisis usa datos sintéticos generados para propósitos de portfolio. La metodología es aplicable a datasets reales de PanamaCompra, USAspending.gov, o sistemas ERP internos.*
+## Resources and code
+
+All the code is available on GitHub — including the cleaning script, 10 documented SQL queries, EDA scripts with 6 visualizations, and the interactive HTML dashboard:
+
+🔗 **GitHub:** `github.com/jersonjair/procurement-spend-analytics`
+🔗 **Dashboard:** `jersonjair.github.io/procurement-spend-analytics`
+
+If you work in procurement, supply chain or data analytics and want to discuss the methodology — find me on LinkedIn.
+
+---
+
+*This analysis uses synthetic data generated for portfolio purposes. The methodology is directly applicable to real datasets from PanamaCompra, USAspending.gov, or internal ERP systems.*
 
 ---
 
