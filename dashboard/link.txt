@@ -1,0 +1,3 @@
+Dashboard disponible como archivo HTML standalone.
+Para publicar online: subir index.html a GitHub Pages, Netlify Drop, o Vercel.
+GitHub Pages: activar en repo Settings > Pages > Deploy from branch > /dashboard folder

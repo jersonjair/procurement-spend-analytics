@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Artículo LinkedIn — LatamCorp Procurement Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink:      #1A1A2E;
+    --ink2:     #3D3D5C;
+    --muted:    #7A7A9A;
+    --rule:     #E2E2EE;
+    --accent:   #2563EB;
+    --accent2:  #DC2626;
+    --bg:       #FAFAF8;
+    --surface:  #F3F3EF;
+    --code-bg:  #1E1E2E;
+    --code-fg:  #CDD6F4;
+    --serif:    'Source Serif 4', Georgia, serif;
+    --display:  'Playfair Display', Georgia, serif;
+    --mono:     'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── META BAR ── */
+  .meta-bar {
+    background: var(--ink);
+    color: rgba(255,255,255,.55);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 12px 48px;
+    display: flex; gap: 32px;
+  }
+  .meta-bar span { color: rgba(255,255,255,.85); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 72px 32px 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-kicker::after {
+    content: ''; flex: 1; height: 1px; background: var(--accent); opacity: .3;
+    max-width: 60px;
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.12;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-lede {
+    font-size: 20px; font-weight: 300; font-style: italic;
+    color: var(--ink2); line-height: 1.6;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 32px;
+  }
+  .author-row {
+    display: flex; align-items: center; gap: 14px;
+    padding-top: 24px; border-top: 1px solid var(--rule);
+  }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #7C3AED);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 18px; color: white; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .author-info .name { font-weight: 600; font-size: 15px; color: var(--ink); }
+  .author-info .role { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+
+  /* ── ARTICLE BODY ── */
+  .article {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 32px 96px;
+  }
+
+  .article p { margin-bottom: 24px; color: var(--ink); }
+
+  .article h2 {
+    font-family: var(--display); font-size: 28px; font-weight: 700;
+    color: var(--ink); margin: 56px 0 20px;
+    padding-bottom: 12px; border-bottom: 2px solid var(--rule);
+    counter-increment: section;
+  }
+  .article h3 {
+    font-family: var(--display); font-size: 20px; font-style: italic;
+    color: var(--ink2); margin: 36px 0 14px;
+  }
+
+  /* ── PULLQUOTE ── */
+  .pullquote {
+    margin: 40px -24px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    font-family: var(--display); font-size: 22px; font-style: italic;
+    color: var(--ink2); line-height: 1.45;
+  }
+  .pullquote cite {
+    display: block; margin-top: 10px;
+    font-family: var(--mono); font-size: 11px; font-style: normal;
+    color: var(--muted); letter-spacing: .08em; text-transform: uppercase;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 28px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  thead { background: var(--ink); color: white; }
+  thead th {
+    padding: 12px 16px; text-align: left;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .08em;
+    text-transform: uppercase; font-weight: 500;
+  }
+  tbody tr { border-bottom: 1px solid var(--rule); }
+  tbody tr:hover { background: var(--surface); }
+  tbody td { padding: 12px 16px; }
+  tbody tr:first-child td { font-weight: 600; color: var(--accent2); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    margin: 28px 0; border-radius: 8px; overflow: hidden;
+  }
+  .code-header {
+    background: #11111B; padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.4);
+    letter-spacing: .08em;
+  }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dots span {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+  .code-dots span:nth-child(1) { background: #FF5F57; }
+  .code-dots span:nth-child(2) { background: #FFBD2E; }
+  .code-dots span:nth-child(3) { background: #28C840; }
+  pre {
+    background: var(--code-bg); padding: 20px 20px;
+    overflow-x: auto; margin: 0;
+  }
+  pre code {
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    color: var(--code-fg);
+  }
+  .kw  { color: #CBA6F7; }
+  .fn  { color: #89B4FA; }
+  .str { color: #A6E3A1; }
+  .cm  { color: #585B70; font-style: italic; }
+  .num { color: #FAB387; }
+  .op  { color: #89DCEB; }
+
+  /* ── STAT CALLOUTS ── */
+  .stat-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin: 32px 0;
+  }
+  .stat-card {
+    background: var(--surface); border-radius: 10px; padding: 20px;
+    text-align: center; border-top: 3px solid var(--accent);
+  }
+  .stat-card.red  { border-top-color: var(--accent2); }
+  .stat-card.green { border-top-color: #16A34A; }
+  .stat-num {
+    font-family: var(--display); font-size: 36px; font-weight: 700;
+    color: var(--ink); line-height: 1;
+  }
+  .stat-label { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; letter-spacing: .08em; text-transform: uppercase; }
+
+  /* ── INSIGHT BOX ── */
+  .insight {
+    background: #EFF6FF; border: 1px solid #BFDBFE;
+    border-radius: 8px; padding: 18px 20px; margin: 24px 0;
+    font-size: 16px; color: #1E40AF;
+  }
+  .insight strong { color: #1D4ED8; }
+  .insight.warn { background: #FEF2F2; border-color: #FECACA; color: #991B1B; }
+  .insight.warn strong { color: #B91C1C; }
+  .insight.success { background: #F0FDF4; border-color: #BBF7D0; color: #166534; }
+  .insight.success strong { color: #15803D; }
+
+  /* ── TAGS ── */
+  .tags {
+    margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .tag {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 99px; padding: 5px 14px;
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    letter-spacing: .06em;
+  }
+
+  /* ── CTA ── */
+  .cta-box {
+    background: var(--ink); color: white;
+    border-radius: 12px; padding: 32px 36px; margin: 40px 0;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .cta-box .cta-icon { font-size: 36px; flex-shrink: 0; }
+  .cta-box h3 { font-family: var(--display); font-size: 20px; margin-bottom: 6px; }
+  .cta-box p  { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 14px; }
+  .cta-links  { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cta-link {
+    display: inline-block; padding: 8px 18px; border-radius: 6px;
+    font-family: var(--mono); font-size: 12px; text-decoration: none;
+    font-weight: 500;
+  }
+  .cta-link.primary { background: var(--accent); color: white; }
+  .cta-link.secondary { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.2); }
+
+  /* ── COPY BUTTON ── */
+  .copy-bar {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--ink); color: white;
+    padding: 12px 20px; border-radius: 8px; cursor: pointer;
+    font-family: var(--mono); font-size: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.2);
+    display: flex; align-items: center; gap: 8px;
+    transition: background .2s; z-index: 100; border: none;
+  }
+  .copy-bar:hover { background: var(--accent); }
+
+  /* ── NOTE ── */
+  .article-note {
+    font-size: 13px; color: var(--muted); font-style: italic;
+    border-top: 1px solid var(--rule); margin-top: 48px; padding-top: 16px;
+  }
+
+  @media (max-width: 640px) {
+    .meta-bar { padding: 10px 20px; gap: 16px; font-size: 10px; }
+    .hero, .article { padding-left: 20px; padding-right: 20px; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .pullquote { margin-left: 0; margin-right: 0; }
+    .cta-box { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- META BAR -->
+<div class="meta-bar">
+  <div>Formato <span>LinkedIn Article / Medium</span></div>
+  <div>Lectura estimada <span>6 min</span></div>
+  <div>Autor <span>Jerson</span></div>
+  <div>Publicación <span>Mayo 2025</span></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Procurement Analytics · Caso de Estudio</div>
+  <h1>Cómo usé Python, SQL y un dashboard para analizar <em>$205M</em> en contratos de procurement</h1>
+  <div class="hero-lede">
+    ¿Realmente sabemos dónde está yendo el dinero? Construí un pipeline completo de datos para responder esa pregunta — y los hallazgos cambian cómo pensamos el riesgo de proveedores.
+  </div>
+  <div class="author-row">
+    <div class="avatar">J</div>
+    <div class="author-info">
+      <div class="name">Jerson</div>
+      <div class="role">Procurement Data Analyst · UETA Latinoamerica</div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE -->
+<div class="article">
+
+  <p>Hace unas semanas me hice una pregunta que todo analista de procurement debería hacerse antes de tomar cualquier decisión de compra:</p>
+
+  <div class="pullquote">
+    ¿Realmente sabemos dónde está yendo el dinero?
+    <cite>La pregunta que inició este proyecto</cite>
+  </div>
+
+  <p>La respuesta honesta, en la mayoría de organizaciones, es: <strong>no del todo</strong>. Los datos existen — están en el ERP, en los contratos, en los correos. Pero dispersos, sin estructura, sin historia. Este proyecto nació de querer responder esa pregunta correctamente.</p>
+
+  <!-- STATS -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-num">$205M</div>
+      <div class="stat-label">Gasto analizado</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num">4,930</div>
+      <div class="stat-label">Contratos procesados</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">20</div>
+      <div class="stat-label">Vendors únicos</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <h2>El stack técnico: simple e intencional</h2>
+
+  <p>No usé nada que no pueda justificar ante un equipo de negocio:</p>
+
+  <p><strong>Python + pandas</strong> para limpieza y análisis exploratorio. <strong>SQL con DuckDB</strong> para consultas analíticas directamente sobre el CSV procesado — sin levantar un servidor. <strong>HTML + Chart.js</strong> para el dashboard interactivo, standalone, sin licencias.</p>
+
+  <div class="insight">
+    <strong>Nota técnica:</strong> DuckDB permite ejecutar SQL complejo sobre archivos CSV directamente desde Python. Es una de las herramientas más subestimadas para análisis de datos locales — corre window functions, CTEs y aggregaciones en milisegundos sobre millones de filas.
+  </div>
+
+  <!-- SECTION 2 -->
+  <h2>Hallazgo 1: El problema Pareto — 5 vendors, 83% del gasto</h2>
+
+  <p>Este fue el hallazgo más crítico del análisis.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Vendor</th><th>Gasto Total</th><th>% del Total</th><th>% Acumulado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Distribuidora Global S.A.</td><td>$45.9M</td><td>22.4%</td><td>22.4%</td></tr>
+        <tr><td>2</td><td>TechSupplies Panama</td><td>$38.9M</td><td>18.9%</td><td>41.3%</td></tr>
+        <tr><td>3</td><td>Grupo Logístico del Istmo</td><td>$30.7M</td><td>15.0%</td><td>56.2%</td></tr>
+        <tr><td>4</td><td>Oficentro Internacional</td><td>$29.9M</td><td>14.6%</td><td>70.8%</td></tr>
+        <tr><td>5</td><td>Ferremax Industrial</td><td>$25.0M</td><td>12.2%</td><td>83.0%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="insight warn">
+    <strong>⚠ Riesgo operacional:</strong> Esto no es eficiencia — es fragilidad. Un problema con cualquiera de estos vendors impactaría materialmente la operación de múltiples departamentos simultáneamente.
+  </div>
+
+  <!-- SECTION 3 -->
+  <h2>Hallazgo 2: El índice HHI en zona límite</h2>
+
+  <p>Para medir concentración objetivamente, calculé el <strong>Índice Herfindahl-Hirschman (HHI)</strong> — la misma métrica que usan los reguladores antimonopolio para evaluar competencia de mercado.</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <span>SQL · DuckDB · queries.sql</span>
+    </div>
+    <pre><code><span class="kw">WITH</span> shares <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        vendor_name,
+        <span class="fn">SUM</span>(award_amount) <span class="op">*</span> <span class="num">100.0</span>
+            <span class="op">/</span> <span class="fn">SUM</span>(<span class="fn">SUM</span>(award_amount)) <span class="kw">OVER</span> () <span class="kw">AS</span> market_share_pct
+    <span class="kw">FROM</span> procurement
+    <span class="kw">GROUP BY</span> vendor_name
+)
+<span class="kw">SELECT</span>
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(market_share_pct <span class="op">*</span> market_share_pct), <span class="num">1</span>) <span class="kw">AS</span> HHI_index
+<span class="kw">FROM</span> shares;
+
+<span class="cm">-- Resultado: 1,466.1  →  límite del umbral competitivo (&lt; 1,500)</span></code></pre>
+  </div>
+
+  <p>Con <strong>HHI = 1,466</strong>, estamos a solo 34 puntos de entrar en zona de concentración moderada (1,500–2,500). Un contrato adicional significativo con Distribuidora Global lo empujaría por encima del umbral.</p>
+
+  <!-- SECTION 4 -->
+  <h2>Hallazgo 3: IT creció 23%. Logistics creció 53%. ¿Por qué?</h2>
+
+  <p>El análisis año contra año reveló patrones muy distintos por categoría:</p>
+
+  <div class="insight success">
+    <strong>↑ Logistics & Transport +53%</strong> ($12.6M → $19.3M) y <strong>IT & Technology +23%</strong> ($22M → $27.1M). El crecimiento de IT correlaciona con digitalización. El salto de Logistics merece revisión profunda.
+  </div>
+
+  <div class="insight warn">
+    <strong>↓ Professional Services -17%</strong> ($15.1M → $12.6M) y <strong>Maintenance & Repair -11%</strong>. ¿Optimización real o recortes que afectan proyectos estratégicos?
+  </div>
+
+  <p>Sin datos, ambas interpretaciones son solo opiniones. Con datos, podemos tomar decisiones.</p>
+
+  <!-- SECTION 5 -->
+  <h2>Hallazgo 4: El pico de diciembre y el presupuesto que "vence"</h2>
+
+  <p>La tendencia mensual reveló un pico de <strong>$12.5M en diciembre 2023</strong> — el más alto del período, 50% por encima del mes anterior. Es el patrón clásico de <em>"gasta o pierde el presupuesto"</em>.</p>
+
+  <div class="insight warn">
+    <strong>⚠ Consecuencias:</strong> Contratos adjudicados bajo presión de tiempo, menos competencia entre vendors, menor capacidad de negociación. Un patrón recurrente puede costar millones en valor no capturado.
+  </div>
+
+  <!-- SECTION 6 -->
+  <h2>La query que más me gustó escribir</h2>
+
+  <p>El acumulado Pareto calculado directamente en SQL, sin necesidad de Python:</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span></span><span></span><span></span></div>
+      <span>SQL · Window Functions · Pareto Acumulado</span>
+    </div>
+    <pre><code><span class="kw">SELECT</span>
+    vendor_name,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(award_amount) <span class="op">*</span> <span class="num">100.0</span>
+          <span class="op">/</span> <span class="fn">SUM</span>(<span class="fn">SUM</span>(award_amount)) <span class="kw">OVER</span> (), <span class="num">2</span>) <span class="kw">AS</span> pct_of_total,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(<span class="fn">SUM</span>(award_amount)) <span class="kw">OVER</span> (
+          <span class="kw">ORDER BY</span> <span class="fn">SUM</span>(award_amount) <span class="kw">DESC</span>
+          <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>)
+          <span class="op">*</span> <span class="num">100.0</span> <span class="op">/</span> <span class="fn">SUM</span>(<span class="fn">SUM</span>(award_amount)) <span class="kw">OVER</span> (), <span class="num">2</span>) <span class="kw">AS</span> cumulative_pct
+<span class="kw">FROM</span> procurement
+<span class="kw">GROUP BY</span> vendor_name
+<span class="kw">ORDER BY</span> <span class="fn">SUM</span>(award_amount) <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <!-- SECTION 7 -->
+  <h2>Tres cosas que aprendí construyendo esto</h2>
+
+  <h3>1. Los datos sucios son la norma</h3>
+  <p>El dataset tenía 30 duplicados exactos, 158 nulos en montos y 38 vendors únicos que después de estandarizar casing se redujeron a 20. La limpieza tomó tanto tiempo como el análisis. Siempre lo hace.</p>
+
+  <h3>2. Los números son el punto de partida, no el destino</h3>
+  <p>El HHI de 1,466 es interesante. La pregunta <em>"¿qué hacemos con eso?"</em> es donde está el valor real. Un analista que solo reporta números no agrega tanto valor como uno que conecta los números con decisiones de negocio.</p>
+
+  <h3>3. Un dashboard que nadie entiende es inútil</h3>
+  <p>Diseñé el dashboard para que un gerente sin contexto técnico pueda leerlo en 2 minutos y extraer acciones concretas. Eso es más difícil que construir el modelo.</p>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div class="cta-icon">📊</div>
+    <div>
+      <h3>Código y dashboard disponibles</h3>
+      <p>Python · SQL · 10 queries documentadas · dashboard interactivo HTML · README profesional</p>
+      <div class="cta-links">
+        <a href="https://github.com/tu-usuario/procurement-spend-analytics" class="cta-link primary">Ver en GitHub</a>
+        <a href="https://tu-usuario.github.io/procurement-spend-analytics" class="cta-link secondary">Ver Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAGS -->
+  <div class="tags">
+    <span class="tag">#DataAnalytics</span>
+    <span class="tag">#Procurement</span>
+    <span class="tag">#Python</span>
+    <span class="tag">#SQL</span>
+    <span class="tag">#SupplyChain</span>
+    <span class="tag">#PowerBI</span>
+    <span class="tag">#DataScience</span>
+    <span class="tag">#Panama</span>
+    <span class="tag">#LatAm</span>
+    <span class="tag">#Portfolio</span>
+  </div>
+
+  <p class="article-note">Este análisis usa datos sintéticos generados para propósitos de portfolio. La metodología es aplicable a datasets reales de PanamaCompra, USAspending.gov o sistemas ERP internos.</p>
+
+</div>
+
+<!-- COPY BUTTON -->
+<button class="copy-bar" onclick="copyMarkdown()">
+  📋 Copiar texto para LinkedIn/Medium
+</button>
+
+<script>
+function copyMarkdown() {
+  const md = `# Cómo usé Python, SQL y un dashboard interactivo para analizar $205M en contratos de procurement
+
+Hace unas semanas me hice una pregunta que todo analista de procurement debería hacerse antes de tomar cualquier decisión de compra:
+
+> ¿Realmente sabemos dónde está yendo el dinero?
+
+La respuesta honesta, en la mayoría de organizaciones, es: no del todo.
+
+**Lo que construí:** Un pipeline completo de análisis sobre 4,930 contratos de compra (FY2022–2023, $205M en gasto total) usando Python, SQL y un dashboard interactivo HTML.
+
+---
+
+**Hallazgo 1 — El problema Pareto**
+Solo 5 de 20 vendors concentran el 83% del gasto total. Esto no es eficiencia — es fragilidad.
+
+**Hallazgo 2 — HHI en zona límite**
+El Índice Herfindahl-Hirschman = 1,466. A solo 34 puntos del umbral de concentración moderada. Un número que debería estar en el dashboard de cualquier director de procurement.
+
+**Hallazgo 3 — IT +23% YoY. Logistics +53% YoY.**
+Crecimiento sin visibilidad = decisiones a ciegas. El análisis año contra año revela qué categorías merecen revisión urgente.
+
+**Hallazgo 4 — El pico de diciembre**
+$12.5M en un solo mes — el patrón clásico de "gasta o pierde el presupuesto". Un patrón recurrente que puede costar millones en valor no capturado.
+
+---
+
+**Stack:** Python (pandas) · SQL (DuckDB) · HTML/Chart.js para dashboard interactivo
+
+Todo el código disponible en GitHub. Artículo completo con metodología, queries y visualizaciones en el link del perfil.
+
+#DataAnalytics #Procurement #Python #SQL #SupplyChain #DataScience #Panama`;
+
+  navigator.clipboard.writeText(md).then(() => {
+    const btn = document.querySelector('.copy-bar');
+    btn.textContent = '✓ Copiado al portapapeles';
+    setTimeout(() => btn.innerHTML = '📋 Copiar texto para LinkedIn/Medium', 2000);
+  });
+}
+</script>
+
+</body>
+</html>
